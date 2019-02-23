@@ -14,6 +14,10 @@
           <input class="drop__input" type="file" multiple="multiple" @change="onDrop">
         </label>
       </div>
+      <div class="buttons">
+        <vs-button size="large" color="success" type="border" v-on:click="Encrypt">Encrypt</vs-button>
+        <vs-button size="large" color="primary" type="border" v-on:click="Decrypt">Decrypt</vs-button>
+      </div>
 
       <div class="links">
         <a
@@ -34,16 +38,26 @@ import 'vuesax/dist/vuesax.css'
 Vue.use(Vuesax)
 
 export default {
+  data() {
+    return {
+      files:[]
+    }
+  },
   methods:{
   //input tag, or drag and drop will call; 
     onDrop:function(event){
       let fileList = event.target.files ? 
                      event.target.files:
                      event.dataTransfer.files;
-      let files = [];
       for(let i = 0; i < fileList.length; i++){
-          files.push(fileList[i]);
+          this.files.push(fileList[i]);
       }
+    },
+    Encrypt() {
+      console.log(this.files[0]);
+    },
+    Decrypt() {
+      console.log("Decrypt Clicked");
     }
   },
   components: {
