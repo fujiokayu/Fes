@@ -27,6 +27,11 @@
 
 <script>
 import AppLogo from '~/components/AppLogo.vue'
+import Vue from 'vue'
+import Vuesax from 'vuesax'
+import 'vuesax/dist/vuesax.css'
+
+Vue.use(Vuesax)
 
 export default {
   methods:{
