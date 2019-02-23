@@ -18,7 +18,7 @@
         <vs-button size="large" color="success" type="border" v-on:click="Encrypt">Encrypt</vs-button>
         <vs-button size="large" color="primary" type="border" v-on:click="Decrypt">Decrypt</vs-button>
       </div>
-
+      <vs-divider/>
       <div class="links">
         <a
           href="https://github.com/fujiokayu/Fes"
@@ -44,8 +44,10 @@ export default {
     }
   },
   methods:{
-  //input tag, or drag and drop will call; 
+
     onDrop:function(event){
+      // initialyze
+      this.files = [];
       let fileList = event.target.files ? 
                      event.target.files:
                      event.dataTransfer.files;
@@ -53,11 +55,20 @@ export default {
           this.files.push(fileList[i]);
       }
     },
+    
     Encrypt() {
-      console.log(this.files[0]);
+      console.log("Encrypt " + this.files[0]);
+
+      if (this.files.length == 0){
+        this.$vs.notify({
+          title:"Chose file to encrypt",
+          color:"danger"
+        })
+      }
     },
+
     Decrypt() {
-      console.log("Decrypt Clicked");
+      console.log("Decrypt " + this.files[0]);
     }
   },
   components: {
@@ -68,7 +79,7 @@ export default {
 
 <style>
 .container {
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -80,8 +91,12 @@ export default {
   display: block;
   font-weight: 300;
   font-size: 100px;
-  color: #35495e;
+  color: #ffffff;
   letter-spacing: 1px;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 188px;
 }
 
 .subtitle {
@@ -94,6 +109,27 @@ export default {
 
 .links {
   padding-top: 15px;
+  display: block;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 550px;
+  bottom: 0px;
+  margin: auto;
+  text-align: center;
 }
+
+.drop {
+  font-weight: 300;
+  font-size: 24px;
+  color: #526488;
+  word-spacing: 5px;
+  padding-bottom: 15px;
+}
+
+.buttons {
+  padding-top: 10px;
+}
+
 </style>
 
