@@ -18,6 +18,10 @@
         <vs-button size="large" color="success" type="border" v-on:click="Encrypt">Encrypt</vs-button>
         <vs-button size="large" color="primary" type="border" v-on:click="Decrypt">Decrypt</vs-button>
       </div>
+      <br>
+      <div class="downloader">
+        <a id="crypted" target="_blank">Download</a>
+      </div>
       <vs-divider/>
       <div class="links">
         <a
@@ -64,7 +68,24 @@ export default {
           title:"Chose file to encrypt",
           color:"danger"
         })
+        return;
       }
+
+      let filename = this.files[0].name;
+      let reader = new FileReader;
+      reader.readAsBinaryString(this.files[0]);
+
+      reader.onload = function(){
+        reader.result;
+
+        let blob = new Blob([reader.result], { type: 'application/octet-binary' })
+        let url = window.URL.createObjectURL(blob)
+
+        let download_file = document.getElementById('crypted');
+        download_file.download = filename + '_encrypted';
+        download_file.href = url;
+      };
+
     },
 
     Decrypt() {
