@@ -38,20 +38,24 @@ import AppLogo from '~/components/AppLogo.vue'
 import Vue from 'vue'
 import Vuesax from 'vuesax'
 import 'vuesax/dist/vuesax.css'
+import {encryptFile, isSelected} from 'assets/crypto.js'
 
 Vue.use(Vuesax)
 
 export default {
   data() {
     return {
-      files:[]
+      files:[],
+      url:""
     }
   },
   methods:{
-
     onDrop:function(event){
       // initialyze
       this.files = [];
+      this.url = "";
+      this.filename = "";
+
       let fileList = event.target.files ? 
                      event.target.files:
                      event.dataTransfer.files;
@@ -62,36 +66,43 @@ export default {
     
     Encrypt() {
       console.log("Encrypt " + this.files[0]);
-
-      if (this.files.length == 0){
-        this.$vs.notify({
-          title:"Chose file to encrypt",
-          color:"danger"
-        })
+      if (!isSelected(this))
+      {
         return;
       }
-
-      let filename = this.files[0].name;
       let reader = new FileReader;
-      reader.readAsBinaryString(this.files[0]);
+      reader.readAsArrayBuffer(this.files[0]);
+      let filename = this.files[0].name;
 
       reader.onload = function(){
-        reader.result;
-
-        let blob = new Blob([reader.result], { type: 'application/octet-binary' })
-        let url = window.URL.createObjectURL(blob)
-
-        let download_file = document.getElementById('crypted');
-        download_file.download = filename + '_encrypted';
-        download_file.href = url;
+        encryptFile(reader.result).then( (res) => {
+          let blob = new Blob([res], { type: 'application/octet-binary' });
+          this.url = window.URL.createObjectURL(blob)
+          let download_file = document.getElementById('crypted');
+          download_file.download = filename + '_encrypted';
+          download_file.href = this.url;
+        })
       };
 
+      
     },
 
     Decrypt() {
       console.log("Decrypt " + this.files[0]);
+      if (!isSelected(this))
+      {
+        return;
+      }
+      decryptFile(reader.result).then( (res) => {
+        let blob = new Blob([res], { type: 'application/octet-binary' });
+        this.url = window.URL.createObjectURL(blob)
+        let download_file = document.getElementById('crypted');
+        download_file.download = filename + '_encrypted';
+        download_file.href = this.url;
+      })
     }
   },
+
   components: {
     AppLogo
   }
@@ -150,6 +161,15 @@ export default {
 
 .buttons {
   padding-top: 10px;
+}
+
+.downloader {
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* 1 */
+  font-weight: 300;
+  font-size: 18px;
+  color: #32aa56;
+  word-spacing: 5px;
+  padding-bottom: 15px;
 }
 
 </style>
