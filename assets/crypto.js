@@ -128,9 +128,20 @@ export function isReady(self)
     return true;
   }
 
-  self.$vs.notify({
-    title:"Chose file",
-    color:"danger"
-  })
+  if (self.files.length == 0)
+  {
+    self.$vs.notify({
+      title:"File is not selected",
+      color:"danger"
+    })  
+  }
+  if (self.textarea.length == 0)
+  {
+    self.$vs.notify({
+      title:"Pass-phrase is not filled",
+      color:"danger"
+    })  
+  }
+
   return false;
 }
