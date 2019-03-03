@@ -5,42 +5,126 @@ import 'vuesax/dist/vuesax.css'
 Vue.use(Vuesax)
 
 
-function encryptByCBCMode( key, iv, text )
-{
-  return crypto.subtle.importKey('raw', key,
-      { name: "AES-CBC" },
-      false, ['encrypt'])
-  .then( (k) => {
-      return crypto.subtle.encrypt(
+//http://qnimate.com/passphrase-based-encryption-using-web-cryptography-api/
+class Cryptor {
+
+  constructor(mode) 
+  {
+    console.log("Cryptor created");
+    this.mode = mode;
+  }
+
+  _convertStringToArrayBufferView(str)
+  {
+    let bytes = new Uint8Array(str.length);
+    for (var iii = 0; iii < str.length; iii++) 
+    {
+        bytes[iii] = str.charCodeAt(iii);
+    }
+
+    return bytes;
+  }
+
+  setKey(key)
+  {
+    this.key = key;
+  }
+
+  getKey()
+  {
+    return this.key;
+  }
+
+  async generateNewKey()
+  {
+    this.key = await window.crypto.subtle.generateKey(
       {
-          name: 'AES-CBC',
-          iv: iv,
+        name: this.mode,
+        length: 256,
       },
-      k, text)
-  })
+      true,
+      ["encrypt", "decrypt"]
+    );
+  }
+
+  async generateNewKeyAndIVFromPassPhrase(passPhrase)
+  {
+    let mode = this.mode;
+    let digest = await crypto.subtle.digest({name: "SHA-256"}, this._convertStringToArrayBufferView(passPhrase))
+    let key;
+    await window.crypto.subtle.importKey("raw", digest, {
+        name: mode,
+    }, false, ["encrypt", "decrypt"]).then(function(e){
+      key = e;},
+        function(e){
+        console.log(e);
+    });
+
+    this.key = key;
+    this.iv = digest.slice(16);
+  }
+
+  setIV(iv)
+  {
+    this.iv = iv;
+  }
+  
+  setText(text)
+  {
+    this.text = text;
+  }
+  
+  setMode(mode)
+  {
+    this.mode = mode;
+  }
+  
+  encrypt()
+  {
+    this.translatedText = crypto.subtle.encrypt(
+      {
+          name: this.mode,
+          iv: this.iv,
+      },
+      this.key, this.text)
+  }
+
+  decrypt()
+  {
+    this.translatedText = crypto.subtle.decrypt(
+      {
+          name: this.mode,
+          iv: this.iv,
+      },
+      this.key, this.text)
+  }
 }
 
 
-export async function decryptFile(text)
+export async function decryptFile(data, passPhrase)
 {
-  return;
+  const decryptor = new Cryptor('AES-CBC');
+  await decryptor.generateNewKeyAndIVFromPassPhrase(passPhrase);
+  decryptor.setText(data);
+  decryptor.decrypt();
+
+  return decryptor.translatedText;
 }
 
-export async function encryptFile(text)
+export async function encryptFile(data, passPhrase)
 {
-	let key = new Uint8Array(16);
-  crypto.getRandomValues(key);
-  console.log(String.fromCharCode.apply(null, key));
-  let iv = crypto.getRandomValues(new Uint8Array(16));   
+  const encryptor = new Cryptor('AES-CBC');
+  await encryptor.generateNewKeyAndIVFromPassPhrase(passPhrase);
+  encryptor.setText(data);
+  encryptor.encrypt();
 
-  let result = await encryptByCBCMode(key,iv,text)
-  return result;
+  return encryptor.translatedText;
 }
 
-
-export function isSelected(self)
+export function isReady(self)
 {
-  if (self.files.length != 0){
+  if (self.files.length != 0 && self.textarea.length != 0)
+  {
     return true;
   }
 
