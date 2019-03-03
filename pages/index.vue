@@ -117,11 +117,14 @@ export default {
 
 <style>
 .container {
-  min-height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 10%;
 }
 
 .title {
@@ -134,7 +137,7 @@ export default {
   position: absolute;
   left: 0px;
   right: 0px;
-  top: 100px;
+  top: 16%;
 }
 
 .subtitle {
