@@ -134,7 +134,7 @@ export default {
   position: absolute;
   left: 0px;
   right: 0px;
-  top: 188px;
+  top: 100px;
 }
 
 .subtitle {
@@ -145,19 +145,15 @@ export default {
   padding-bottom: 15px;
 }
 
-.links {
-  padding-top: 15px;
-  display: block;
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 550px;
-  bottom: 0px;
-  margin: auto;
-  text-align: center;
+.drop {
+  font-weight: 300;
+  font-size: 24px;
+  color: #526488;
+  word-spacing: 5px;
+  padding-bottom: 15px;
 }
 
-.drop {
+.textArea {
   font-weight: 300;
   font-size: 24px;
   color: #526488;
