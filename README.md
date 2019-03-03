@@ -5,16 +5,17 @@ This project will be a simple File Encription Service by using [Nuxt.js](https:/
   <img src="https://github.com/fujiokayu/Fes/blob/images/Fes.png" width="400">
 </div>
 
-## Prerequisites
+## Note:
+Encript / Decrypt programs run by client-side.  
+So, there are 2 problems, at least.  
+1. Encryption logic is obvious to everyone.
+1. Using client resource without any confirm.
+
+## How To Start
 
 ```
-yar install
-#or
-npm install
-```
-```
-npm run dev
-#or
+git clone https://github.com/fujiokayu/Fes.git && cd Fes
+yarn install
 yarn run dev
 ```
 
