@@ -1,5 +1,9 @@
 # Fes
-This project will be a simple File Encription Service by using Nuxt.js(https://nuxtjs.org/)
+This project will be a simple File Encription Service by using [Nuxt.js](https://nuxtjs.org/)
+
+<div align="center">
+  <img src="https://github.com/fujiokayu/Fes/blob/images/Fes.png" width="400">
+</div>
 
 ## Prerequisites
 
