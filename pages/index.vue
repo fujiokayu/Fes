@@ -36,7 +36,7 @@ import AppLogo from '~/components/AppLogo.vue'
 import Vue from 'vue'
 import Vuesax from 'vuesax'
 import 'vuesax/dist/vuesax.css'
-import {isReady, encryptFile, decryptFile} from 'assets/crypto.js'
+import {isReady, encryptFile, decryptFile} from 'assets/index.js'
 
 Vue.use(Vuesax)
 
@@ -52,7 +52,6 @@ export default {
     onDrop:function(event){
       // initialyze
       this.files = [];
-      this.url = "";
       this.filename = "";
 
       let fileList = event.target.files ? 
@@ -64,8 +63,6 @@ export default {
     },
     
     Encrypt() {
-      console.log("Encrypt " + this.files[0]);
-      console.log("Encrypt " + this.textarea.value);
       if (!isReady(this))
       {
         return;
@@ -78,16 +75,14 @@ export default {
       reader.onload = function(){
         encryptFile(reader.result, passPhrase).then( (res) => {
           let blob = new Blob([res], { type: 'application/octet-binary' });
-          this.url = window.URL.createObjectURL(blob)
           let download_file = document.getElementById('crypted');
           download_file.download = filename + '_encrypted';
-          download_file.href = this.url;
+          download_file.href = window.URL.createObjectURL(blob);
         })
       };
     },
 
     Decrypt() {
-      console.log("Decrypt " + this.files[0]);
       if (!isReady(this))
       {
         return;
@@ -100,10 +95,9 @@ export default {
       reader.onload = function(){
         decryptFile(reader.result, passPhrase).then( (res) => {
           let blob = new Blob([res], { type: 'application/octet-binary' });
-          this.url = window.URL.createObjectURL(blob)
           let download_file = document.getElementById('crypted');
           download_file.download = filename + '_decrypted';
-          download_file.href = this.url;
+          download_file.href = window.URL.createObjectURL(blob);
         })
       };
     }
@@ -178,4 +172,3 @@ export default {
 }
 
 </style>
-
