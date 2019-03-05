@@ -42,7 +42,7 @@ export class Cryptor {
     );
   }
 
-  async generateNewKeyAndIVFromPassPhrase(passPhrase)
+  async generateNewKeyAndNonceFromPassPhrase(passPhrase)
   {
     let mode = this.mode;
     let digest = await crypto.subtle.digest({name: "SHA-256"}, this._convertStringToArrayBufferView(passPhrase))
@@ -56,12 +56,12 @@ export class Cryptor {
     });
 
     this.key = key;
-    this.iv = digest.slice(16);
+    this.nonce = digest.slice(16);
   }
 
-  setIV(iv)
+  setNonce(nonce)
   {
-    this.iv = iv;
+    this.nonce = nonce;
   }
   
   setText(text)
@@ -78,8 +78,9 @@ export class Cryptor {
   {
     this.translatedText = crypto.subtle.encrypt(
       {
-          name: this.mode,
-          iv: this.iv,
+        name: this.mode,
+        counter: this.nonce,
+        length: 128
       },
       this.key, this.text)
   }
@@ -88,7 +89,8 @@ export class Cryptor {
   {
     this.translatedText = crypto.subtle.decrypt({
       name: this.mode,
-      iv: this.iv
+      counter: this.nonce,
+      length: 128
     },
     this.key, this.text)
   }

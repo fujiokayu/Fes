@@ -9,8 +9,8 @@ Vue.use(Vuesax)
 
 export async function decryptFile(data, passPhrase)
 {
-  const decryptor = new Cryptor('AES-CBC');
-  await decryptor.generateNewKeyAndIVFromPassPhrase(passPhrase);
+  const decryptor = new Cryptor('AES-CTR');
+  await decryptor.generateNewKeyAndNonceFromPassPhrase(passPhrase);
   decryptor.setText(data);
   decryptor.decrypt();
 
@@ -19,8 +19,8 @@ export async function decryptFile(data, passPhrase)
 
 export async function encryptFile(data, passPhrase)
 {
-  const encryptor = new Cryptor('AES-CBC');
-  await encryptor.generateNewKeyAndIVFromPassPhrase(passPhrase);
+  const encryptor = new Cryptor('AES-CTR');
+  await encryptor.generateNewKeyAndNonceFromPassPhrase(passPhrase);
   encryptor.setText(data);
   encryptor.encrypt();
 
