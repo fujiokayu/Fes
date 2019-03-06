@@ -36,7 +36,7 @@ import AppLogo from '~/components/AppLogo.vue'
 import Vue from 'vue'
 import Vuesax from 'vuesax'
 import 'vuesax/dist/vuesax.css'
-import {isReady, encryptFile, decryptFile} from 'assets/index.js'
+import {isReady, checkFileSize, encryptFile, decryptFile} from 'assets/index.js'
 
 Vue.use(Vuesax)
 
@@ -69,10 +69,16 @@ export default {
       }
       let reader = new FileReader;
       reader.readAsArrayBuffer(this.files[0]);
+
       let filename = this.files[0].name;
       let passPhrase = this.textarea;
+      let _this = this;
 
       reader.onload = function(){
+        if (!checkFileSize(_this, reader.result.byteLength))
+        {
+          return;
+        }
         encryptFile(reader.result, passPhrase).then( (res) => {
           let blob = new Blob([res], { type: 'application/octet-binary' });
           let download_file = document.getElementById('crypted');
@@ -91,8 +97,13 @@ export default {
       reader.readAsArrayBuffer(this.files[0]);
       let filename = this.files[0].name;
       let passPhrase = this.textarea;
+      let _this = this;
 
       reader.onload = function(){
+        if (!checkFileSize(_this, reader.result.byteLength))
+        {
+          return;
+        }
         decryptFile(reader.result, passPhrase).then( (res) => {
           let blob = new Blob([res], { type: 'application/octet-binary' });
           let download_file = document.getElementById('crypted');
