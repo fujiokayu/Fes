@@ -68,29 +68,27 @@ function isReady(_this)
   return false;
 }
 
-export function execute(self)
+export function execute(_this)
 {
-  if (!isReady(self))
+  if (!isReady(_this) || 
+      !checkFileSize(_this, _this.files[0].size))
   {
     return;
   }
   let reader = new FileReader;
-  reader.readAsArrayBuffer(self.files[0]);
+  reader.readAsArrayBuffer(_this.files[0]);
 
-  let filename = self.files[0].name;
-  let passPhrase = self.textarea;
-  let _this = self;
+  let filename = _this.files[0].name;
+  let passPhrase = _this.textarea;
+  let isEncrypt = _this.isEncrypt;
 
   reader.onload = function(){
-    if (!checkFileSize(_this, reader.result.byteLength))
-    {
-      return;
-    }
-    if (_this.isEncrypt)
+    if (isEncrypt)
     {
       encryptFile(reader.result, passPhrase).then( (res) => {
         let blob = new Blob([res], { type: 'application/octet-binary' });
         let download_file = document.getElementById('crypted');
+        download_file.style.display="block";
         download_file.download = filename + '_encrypted';
         download_file.href = window.URL.createObjectURL(blob);
       })  
@@ -100,6 +98,7 @@ export function execute(self)
       decryptFile(reader.result, passPhrase).then( (res) => {
         let blob = new Blob([res], { type: 'application/octet-binary' });
         let download_file = document.getElementById('crypted');
+        download_file.style.display="block";
         download_file.download = filename + '_decrypted';
         download_file.href = window.URL.createObjectURL(blob);
       })

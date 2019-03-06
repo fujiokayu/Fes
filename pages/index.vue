@@ -25,7 +25,7 @@
       <br>
       <vs-divider/>
       <div class="downloader">
-        <a id="crypted" target="_blank">Download</a>
+        <a id="crypted" style="display:none" target="_blank">Download</a>
       </div>
     </div>
   </section>
@@ -44,7 +44,6 @@ export default {
   data() {
     return {
       files:[],
-      url:"",
       textarea: '',
       isEncrypt:false
     }
@@ -54,6 +53,7 @@ export default {
       // initialyze
       this.files = [];
       this.filename = "";
+      document.getElementById('crypted').style.display="none";
 
       let fileList = event.target.files ? 
                      event.target.files:
@@ -102,7 +102,7 @@ export default {
   position: absolute;
   left: 0px;
   right: 0px;
-  top: 16%;
+  top: 17%;
 }
 
 .subtitle {
