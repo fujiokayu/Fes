@@ -36,7 +36,7 @@ import AppLogo from '~/components/AppLogo.vue'
 import Vue from 'vue'
 import Vuesax from 'vuesax'
 import 'vuesax/dist/vuesax.css'
-import {isReady, checkFileSize, encryptFile, decryptFile} from 'assets/index.js'
+import {execute} from 'assets/index.js'
 
 Vue.use(Vuesax)
 
@@ -45,7 +45,8 @@ export default {
     return {
       files:[],
       url:"",
-      textarea: ''
+      textarea: '',
+      isEncrypt:false
     }
   },
   methods:{
@@ -63,54 +64,13 @@ export default {
     },
     
     Encrypt() {
-      if (!isReady(this))
-      {
-        return;
-      }
-      let reader = new FileReader;
-      reader.readAsArrayBuffer(this.files[0]);
-
-      let filename = this.files[0].name;
-      let passPhrase = this.textarea;
-      let _this = this;
-
-      reader.onload = function(){
-        if (!checkFileSize(_this, reader.result.byteLength))
-        {
-          return;
-        }
-        encryptFile(reader.result, passPhrase).then( (res) => {
-          let blob = new Blob([res], { type: 'application/octet-binary' });
-          let download_file = document.getElementById('crypted');
-          download_file.download = filename + '_encrypted';
-          download_file.href = window.URL.createObjectURL(blob);
-        })
-      };
+      this.isEncrypt = true;
+      execute(this);
     },
 
     Decrypt() {
-      if (!isReady(this))
-      {
-        return;
-      }
-      let reader = new FileReader;
-      reader.readAsArrayBuffer(this.files[0]);
-      let filename = this.files[0].name;
-      let passPhrase = this.textarea;
-      let _this = this;
-
-      reader.onload = function(){
-        if (!checkFileSize(_this, reader.result.byteLength))
-        {
-          return;
-        }
-        decryptFile(reader.result, passPhrase).then( (res) => {
-          let blob = new Blob([res], { type: 'application/octet-binary' });
-          let download_file = document.getElementById('crypted');
-          download_file.download = filename + '_decrypted';
-          download_file.href = window.URL.createObjectURL(blob);
-        })
-      };
+      this.isEncrypt = false;
+      execute(this);
     }
   },
 

@@ -8,7 +8,7 @@ Vue.use(Vuesax)
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024// 2GB
 
-export async function decryptFile(data, passPhrase)
+async function decryptFile(data, passPhrase)
 {
   const decryptor = new Cryptor('AES-CTR');
   await decryptor.generateNewKeyAndNonceFromPassPhrase(passPhrase);
@@ -18,7 +18,7 @@ export async function decryptFile(data, passPhrase)
   return decryptor.translatedText;
 }
 
-export async function encryptFile(data, passPhrase)
+async function encryptFile(data, passPhrase)
 {
   const encryptor = new Cryptor('AES-CTR');
   await encryptor.generateNewKeyAndNonceFromPassPhrase(passPhrase);
@@ -28,7 +28,7 @@ export async function encryptFile(data, passPhrase)
   return encryptor.translatedText;
 }
 
-export function checkFileSize(_this, size)
+function checkFileSize(_this, size)
 {
   if (size < MAX_FILE_SIZE)
   {
@@ -43,7 +43,7 @@ export function checkFileSize(_this, size)
   return false;
 }
 
-export function isReady(_this)
+function isReady(_this)
 {
   if (_this.files.length != 0 && _this.textarea.length != 0)
   {
@@ -66,4 +66,44 @@ export function isReady(_this)
   }
 
   return false;
+}
+
+export function execute(self)
+{
+  if (!isReady(self))
+  {
+    return;
+  }
+  let reader = new FileReader;
+  reader.readAsArrayBuffer(self.files[0]);
+
+  let filename = self.files[0].name;
+  let passPhrase = self.textarea;
+  let _this = self;
+
+  reader.onload = function(){
+    if (!checkFileSize(_this, reader.result.byteLength))
+    {
+      return;
+    }
+    if (_this.isEncrypt)
+    {
+      encryptFile(reader.result, passPhrase).then( (res) => {
+        let blob = new Blob([res], { type: 'application/octet-binary' });
+        let download_file = document.getElementById('crypted');
+        download_file.download = filename + '_encrypted';
+        download_file.href = window.URL.createObjectURL(blob);
+      })  
+    }
+    else
+    {
+      decryptFile(reader.result, passPhrase).then( (res) => {
+        let blob = new Blob([res], { type: 'application/octet-binary' });
+        let download_file = document.getElementById('crypted');
+        download_file.download = filename + '_decrypted';
+        download_file.href = window.URL.createObjectURL(blob);
+      })
+    }
+  };
+
 }
