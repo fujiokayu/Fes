@@ -1,7 +1,7 @@
 <img src="https://github.com/fujiokayu/Fes/blob/images/Fes.png" width="400">
 
 # Fes
-is a Free Encryption Service by using [Nuxt.js](https://nuxtjs.org/).
+is a free File Encryption Service by using [Nuxt.js](https://nuxtjs.org/).
 
 ## Features
 - This application can encrypt / decrypt files by using pass-phrase encryption.  
@@ -20,3 +20,7 @@ git clone https://github.com/fujiokayu/Fes.git && cd Fes
 yarn install
 yarn run nuxt
 ```
+
+## How To Use
+
+visit https://f-es.herokuapp.com/
