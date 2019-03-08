@@ -6,7 +6,7 @@
         Fes
       </h1>
       <h2 class="subtitle">
-        simple File Encription Service 
+        Free Encryption Service 
       </h2>
       <!-- https://www.tohuandkonsome.site/entry/2018/01/22/223224#dropvue%E3%81%AB%E3%83%89%E3%83%A9%E3%83%83%E3%82%B0--%E3%83%89%E3%83%AD%E3%83%83%E3%83%97%E3%81%A7%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E9%81%B8%E6%8A%9E%E3%82%92%E8%BF%BD%E5%8A%A0%E3%81%99%E3%82%8B -->
       <div class="drop" @dragleave.prevent @dragover.prevent @drop.prevent="onDrop">
@@ -25,7 +25,7 @@
       <br>
       <vs-divider/>
       <div class="downloader">
-        <a id="crypted" target="_blank">Download</a>
+        <a id="crypted" style="display:none" target="_blank">Download</a>
       </div>
     </div>
   </section>
@@ -36,7 +36,7 @@ import AppLogo from '~/components/AppLogo.vue'
 import Vue from 'vue'
 import Vuesax from 'vuesax'
 import 'vuesax/dist/vuesax.css'
-import {isReady, encryptFile, decryptFile} from 'assets/crypto.js'
+import {execute} from 'assets/index.js'
 
 Vue.use(Vuesax)
 
@@ -44,16 +44,16 @@ export default {
   data() {
     return {
       files:[],
-      url:"",
-      textarea: ''
+      textarea: '',
+      isEncrypt:false
     }
   },
   methods:{
     onDrop:function(event){
       // initialyze
       this.files = [];
-      this.url = "";
       this.filename = "";
+      document.getElementById('crypted').style.display="none";
 
       let fileList = event.target.files ? 
                      event.target.files:
@@ -64,48 +64,13 @@ export default {
     },
     
     Encrypt() {
-      console.log("Encrypt " + this.files[0]);
-      console.log("Encrypt " + this.textarea.value);
-      if (!isReady(this))
-      {
-        return;
-      }
-      let reader = new FileReader;
-      reader.readAsArrayBuffer(this.files[0]);
-      let filename = this.files[0].name;
-      let passPhrase = this.textarea;
-
-      reader.onload = function(){
-        encryptFile(reader.result, passPhrase).then( (res) => {
-          let blob = new Blob([res], { type: 'application/octet-binary' });
-          this.url = window.URL.createObjectURL(blob)
-          let download_file = document.getElementById('crypted');
-          download_file.download = filename + '_encrypted';
-          download_file.href = this.url;
-        })
-      };
+      this.isEncrypt = true;
+      execute(this);
     },
 
     Decrypt() {
-      console.log("Decrypt " + this.files[0]);
-      if (!isReady(this))
-      {
-        return;
-      }
-      let reader = new FileReader;
-      reader.readAsArrayBuffer(this.files[0]);
-      let filename = this.files[0].name;
-      let passPhrase = this.textarea;
-
-      reader.onload = function(){
-        decryptFile(reader.result, passPhrase).then( (res) => {
-          let blob = new Blob([res], { type: 'application/octet-binary' });
-          this.url = window.URL.createObjectURL(blob)
-          let download_file = document.getElementById('crypted');
-          download_file.download = filename + '_decrypted';
-          download_file.href = this.url;
-        })
-      };
+      this.isEncrypt = false;
+      execute(this);
     }
   },
 
@@ -137,7 +102,7 @@ export default {
   position: absolute;
   left: 0px;
   right: 0px;
-  top: 16%;
+  top: 17%;
 }
 
 .subtitle {
@@ -178,4 +143,3 @@ export default {
 }
 
 </style>
-
