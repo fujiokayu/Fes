@@ -1,3 +1,5 @@
+const JavaScriptObfuscator = require('webpack-obfuscator');
+
 module.exports = {
   /*
   ** Headers of the page
@@ -33,7 +35,18 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
-    }
+    },
+    plugins: [
+      // webpack-obfuscator
+      // reference: https://hi120ki.github.io/blog/posts/20190207/
+      new JavaScriptObfuscator({
+        // JavaScript obfuscator option
+        stringArrayEncoding: true,
+        stringArrayThreshold: 1,
+        deadCodeInjection: true,
+        deadCodeInjectionThreshold: 0.2
+      })
+    ]
   }
 }
 
