@@ -78,31 +78,29 @@ export function execute(_this)
   let reader = new FileReader;
   reader.readAsArrayBuffer(_this.files[0]);
 
-  let filename = _this.files[0].name;
-  let passPhrase = _this.textarea;
-  let isEncrypt = _this.isEncrypt;
+  let download_file = document.getElementById('crypted');
+  _this.processing = true;
 
-  reader.onload = function(){
-    if (isEncrypt)
+  reader.onload = () => {
+    if (_this.isEncrypt)
     {
-      encryptFile(reader.result, passPhrase).then( (res) => {
+      encryptFile(reader.result, _this.textarea).then( (res) => {
         let blob = new Blob([res], { type: 'application/octet-binary' });
-        let download_file = document.getElementById('crypted');
-        download_file.style.display="block";
-        download_file.download = filename + '_encrypted';
+        download_file.download = _this.files[0].name + '_encrypted';
         download_file.href = window.URL.createObjectURL(blob);
-      })  
+        download_file.style.display="block";
+        _this.processing = false;
+      })
     }
     else
     {
-      decryptFile(reader.result, passPhrase).then( (res) => {
+      decryptFile(reader.result, _this.textarea).then( (res) => {
         let blob = new Blob([res], { type: 'application/octet-binary' });
-        let download_file = document.getElementById('crypted');
-        download_file.style.display="block";
-        download_file.download = filename + '_decrypted';
+        download_file.download = _this.files[0].name + '_decrypted';
         download_file.href = window.URL.createObjectURL(blob);
+        download_file.style.display="block";
+        _this.processing = false;
       })
     }
   };
-
 }

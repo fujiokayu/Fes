@@ -24,6 +24,10 @@
       </div>
       <br>
       <vs-divider/>
+
+      <div class="processing-bar" v-if="processing">
+        <vs-progress indeterminate color="success">success</vs-progress>
+      </div>
       <div class="downloader">
         <a id="crypted" style="display:none" target="_blank">Download</a>
       </div>
@@ -45,7 +49,8 @@ export default {
     return {
       files:[],
       textarea: '',
-      isEncrypt:false
+      isEncrypt:false,
+      processing:false
     }
   },
   methods:{
@@ -54,7 +59,7 @@ export default {
       this.files = [];
       this.filename = "";
       document.getElementById('crypted').style.display="none";
-
+      this.processed = false;
       let fileList = event.target.files ? 
                      event.target.files:
                      event.dataTransfer.files;
