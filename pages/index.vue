@@ -31,6 +31,13 @@
       <div class="downloader">
         <a id="crypted" style="display:none" target="_blank">Download</a>
       </div>
+      <div class="License">
+        <a
+          href="https://github.com/fujiokayu/Fes/blob/master/LICENSE"
+          target="_blank"
+          class="button--green">License</a>
+      </div>
+
     </div>
   </section>
 </template>
@@ -107,7 +114,7 @@ export default {
   position: absolute;
   left: 0px;
   right: 0px;
-  top: 17%;
+  top: 18%;
 }
 
 .subtitle {
@@ -145,6 +152,10 @@ export default {
   color: #32aa56;
   word-spacing: 5px;
   padding-bottom: 15px;
+}
+
+.links {
+  padding-top: 15px;
 }
 
 </style>
