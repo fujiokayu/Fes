@@ -14,7 +14,8 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "nuxt": "^2.0.0",
+    "nuxt": "^2.7.1",
+    "vue": "^2.6.10",
     "vuesax": "^3.8.20"
   },
   "devDependencies": {
