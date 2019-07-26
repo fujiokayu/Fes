@@ -18,7 +18,7 @@ So, there are 2 problems, at least.
 ```
 git clone https://github.com/fujiokayu/Fes.git && cd Fes
 npm install
-npm run nuxt
+npm run dev
 ```
 
 ## How To Use
