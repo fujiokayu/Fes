@@ -15,17 +15,18 @@
   },
   "dependencies": {
     "lodash.template": "^4.5.0",
-    "nuxt": "^2.7.1",
+    "nuxt": "^2.10.2",
+    "serialize-javascript": "^2.1.2",
     "vue": "^2.6.10",
-    "vuesax": "^3.8.20"
+    "vuesax": "^3.11.2"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.1",
+    "babel-eslint": "^10.0.3",
     "eslint": "^4.19.1",
     "eslint-friendly-formatter": "^4.0.1",
-    "eslint-loader": "^2.1.1",
+    "eslint-loader": "^2.2.1",
     "eslint-plugin-vue": "^4.0.0",
     "standard": "^11.0.1",
-    "webpack-obfuscator": "^0.18.0"
+    "webpack-obfuscator": "^0.18.7"
   }
 }
