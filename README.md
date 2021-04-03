@@ -1,3 +1,5 @@
+# this repository is no longer maintained
+
 <img src="https://github.com/fujiokayu/Fes/blob/images/Fes.png" width="400">
 
 # Fes
@@ -23,4 +25,4 @@ npm run dev
 
 ## How To Use
 
-visit https://f-es.herokuapp.com/
+~visit https://f-es.herokuapp.com/~
